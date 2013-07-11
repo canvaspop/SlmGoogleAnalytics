@@ -1,4 +1,4 @@
-SlmGoogleAnalytics
+SlmGoogleAnalytics (a la CP)
 ===
 
 [![Build Status](https://secure.travis-ci.org/juriansluiman/SlmGoogleAnalytics.png?branch=master)](http://travis-ci.org/juriansluiman/SlmGoogleAnalytics)
