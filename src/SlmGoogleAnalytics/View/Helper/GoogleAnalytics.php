@@ -50,7 +50,7 @@ class GoogleAnalytics extends AbstractHelper
     /**
      * @var Tracker
      */
-    protected $tracker;
+    protected $trackers;
 
     /**
      * @var string
@@ -62,9 +62,9 @@ class GoogleAnalytics extends AbstractHelper
      */
     protected $rendered = false;
 
-    public function __construct (Tracker $tracker)
+    public function __construct ($collection)
     {
-        $this->tracker = $tracker;
+        $this->trackers = $collection->getTrackers();
     }
 
     public function getContainer ()
@@ -79,16 +79,18 @@ class GoogleAnalytics extends AbstractHelper
 
     public function __invoke ()
     {
+
         // Do not render the GA twice
         if  ($this->rendered) {
             return;
         }
 
+
+           //  MUST FIX
         // Do not render when tracker is disabled
-        $tracker = $this->tracker;
-        if (!$tracker->enabled()) {
-            return;
-        }
+        //if ($tracker->enabled()) {
+        //    return;
+        //}
 
         // We need to be sure $container->appendScript() can be called
         $container = $this->view->plugin($this->getContainer());
@@ -99,74 +101,96 @@ class GoogleAnalytics extends AbstractHelper
             ));
         }
 
+        //if(true === $tracker->getEnableMultipleAccounts)
+        //{
+            //$trackers = $tracker->trackers;
+        //}
+        //else
+        //{
+        //    $trackers[] = $tracker;
+        //}
+
         $script  = "var _gaq = _gaq || [];\n";
-        $script .= sprintf("_gaq.push(['_setAccount', '%s']);\n",
-                           $tracker->getId());
 
-        if ($tracker->getDomainName()) {
-            $script .= sprintf("_gaq.push(['_setDomainName', '%s']);\n",
-                               $tracker->getDomainName());;
-        }
+        foreach ($this->trackers as $tracker) {
+            $script .= sprintf("_gaq.push(['%s._setAccount', '%s']);\n",
+                $tracker->getTitle(),
+                $tracker->getId());
 
-        if ($tracker->getAllowLinker()) {
-            $script .= "_gaq.push(['_setAllowLinker', true]);\n";
-        }
+            if ($tracker->getDomainName()) {
+                $script .= sprintf("_gaq.push(['%s._setDomainName', '%s']);\n",
+                    $tracker->getTitle(),
+                    $tracker->getDomainName());
+            }
 
-        if ($tracker->getAnonymizeIp()) {
-            $script .= "_gaq.push(['_gat._anonymizeIp']);\n";
-        }
+            if ($tracker->getAllowLinker()) {
+                $script .= sprintf("_gaq.push(['%s._setAllowLinker', true]);\n",
+                    $tracker->getTitle());
+            }
 
-        if (null !== ($customVariables = $tracker->customVariables())) {
-            foreach ($customVariables as $variable) {
-                $script .= sprintf("_gaq.push(['_setCustomVar', %d, '%s', '%s', %d]);\n",
+            if ($tracker->getAnonymizeIp()) {
+                $script .= sprintf("_gaq.push(['%s._gat._anonymizeIp']);\n",
+                    $tracker->getTitle());
+            }
+
+            if (null !== ($customVariables = $tracker->customVariables())) {
+                foreach ($customVariables as $variable) {
+                    $script .= sprintf("_gaq.push(['%s._setCustomVar', %d, '%s', '%s', %d]);\n",
+                        $tracker->getTitle(),
                         $variable->getIndex(),
                         $variable->getName(),
                         $variable->getValue(),
                         $variable->getScope());
-            }
-        }
-        
-        if ($tracker->enabledPageTracking()) {
-            $script .= "_gaq.push(['_trackPageview']);\n";
-        }
-        
-
-        if (null !== ($events = $tracker->events())) {
-            foreach ($events as $event) {
-                $script .= sprintf("_gaq.push(['_trackEvent', '%s', '%s', '%s', '%s']);\n",
-                                   $event->getCategory(),
-                                   $event->getAction(),
-                                   $event->getLabel() ?: '',
-                                   $event->getValue() ?: '');
-            }
-        }
-
-        if (null !== ($transactions = $tracker->transactions())) {
-            foreach ($transactions as $transaction) {
-                $script .= sprintf("_gaq.push(['_addTrans', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);\n",
-                                   $transaction->getId(),
-                                   $transaction->getAffiliation() ?: '',
-                                   $transaction->getTotal(),
-                                   $transaction->getTax() ?: '',
-                                   $transaction->getShipping() ?: '',
-                                   $transaction->getCity() ?: '',
-                                   $transaction->getState() ?: '',
-                                   $transaction->getCountry() ?: '');
-
-                if (null !== ($items = $transaction->items())) {
-                    foreach ($items as $item) {
-                        $script .= sprintf("_gaq.push(['_addItem', '%s', '%s', '%s', '%s', '%s', '%s']);\n",
-                                           $transaction->getId(),
-                                           $item->getSku() ?: '',
-                                           $item->getProduct() ?: '',
-                                           $item->getCategory() ?: '',
-                                           $item->getPrice(),
-                                           $item->getQuantity());
-                    }
                 }
             }
 
-            $script .= "_gaq.push(['_trackTrans']);";
+            if ($tracker->enabledPageTracking()) {
+                $script .= sprintf("_gaq.push(['%s._trackPageview']);\n",
+                    $tracker->getTitle());
+            }
+
+
+            if (null !== ($events = $tracker->events())) {
+                foreach ($events as $event) {
+                    $script .= sprintf("_gaq.push(['%s._trackEvent', '%s', '%s', '%s', '%s']);\n",
+                        $tracker->getTitle(),
+                        $event->getCategory(),
+                        $event->getAction(),
+                        $event->getLabel() ?: '',
+                        $event->getValue() ?: '');
+                }
+            }
+
+            if (null !== ($transactions = $tracker->transactions())) {
+                foreach ($transactions as $transaction) {
+                    $script .= sprintf("_gaq.push(['%s._addTrans', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);\n",
+                        $tracker->getTitle(),
+                        $transaction->getId(),
+                        $transaction->getAffiliation() ?: '',
+                        $transaction->getTotal(),
+                        $transaction->getTax() ?: '',
+                        $transaction->getShipping() ?: '',
+                        $transaction->getCity() ?: '',
+                        $transaction->getState() ?: '',
+                        $transaction->getCountry() ?: '');
+
+                    if (null !== ($items = $transaction->items())) {
+                        foreach ($items as $item) {
+                            $script .= sprintf("_gaq.push(['%s._addItem', '%s', '%s', '%s', '%s', '%s', '%s']);\n",
+                                $tracker->getTitle(),
+                                $transaction->getId(),
+                                $item->getSku() ?: '',
+                                $item->getProduct() ?: '',
+                                $item->getCategory() ?: '',
+                                $item->getPrice(),
+                                $item->getQuantity());
+                        }
+                    }
+                }
+
+                $script .= sprintf("_gaq.push(['%s._trackTrans']);",
+                    $tracker->getTitle());
+            }
         }
 
         $script .= <<<SCRIPT

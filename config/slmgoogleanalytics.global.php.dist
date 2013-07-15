@@ -6,6 +6,12 @@
  * drop this config file in it and change the values as you wish.
  */
 $googleAnalytics = array(
+
+    /**
+    * Title of tracker
+    */
+    'title' => 'default',
+
     /**
      * Web property ID (something like UA-xxxxx-x)
      */
