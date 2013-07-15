@@ -11,7 +11,7 @@
 
 namespace SlmGoogleAnalytics\Analytics;
 
-use \SlmGoogleAnalytics\Analytics\Tracker;
+use SlmGoogleAnalytics\Analytics\Tracker;
 
 class Collection
 {

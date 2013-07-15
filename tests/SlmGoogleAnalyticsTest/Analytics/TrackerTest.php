@@ -44,70 +44,64 @@ use SlmGoogleAnalytics\Analytics\Tracker;
 
 class TrackerTest extends TestCase
 {
-    public function testCanInstantiateTracker ()
+    public function testCanInstantiateTracker()
     {
-        $tracker = new Tracker(123);
-        $this->assertEquals(123, $tracker->getId());
+        $tracker = new Tracker( 123 );
+        $this->assertEquals( 123, $tracker->getId() );
     }
 
-    public function testIsEnabledByDefault ()
+    public function testHasPageTrackingEnabledByDefault()
     {
-        $tracker = new Tracker(123);
-        $this->assertTrue($tracker->enabled());
+        $tracker = new Tracker( 123 );
+        $this->assertTrue( $tracker->enabledPageTracking() );
     }
 
-    public function testHasPageTrackingEnabledByDefault ()
+    public function testDomainNameDefaultsToFalse()
     {
-        $tracker = new Tracker(123);
-        $this->assertTrue($tracker->enabledPageTracking());
-    }
-
-    public function testDomainNameDefaultsToFalse ()
-    {
-        $tracker = new Tracker(123);
-        $this->assertNull($tracker->getDomainName());
+        $tracker = new Tracker( 123 );
+        $this->assertNull( $tracker->getDomainName() );
     }
 
     public function testTitle()
     {
-        $tracker = new Tracker(123);
-        $tracker->setTitle('foobar');
-        $this->assertEquals($tracker->getTitle(), 'foobar');
+        $tracker = new Tracker( 123 );
+        $tracker->setTitle( 'foobar' );
+        $this->assertEquals( $tracker->getTitle(), 'foobar' );
     }
 
-    public function testDomainName ()
+    public function testDomainName()
     {
-        $tracker = new Tracker(123);
-        $tracker->setDomainName('foobar');
-        $this->assertEquals($tracker->getDomainName(), 'foobar');
+        $tracker = new Tracker( 123 );
+        $tracker->setDomainName( 'foobar' );
+        $this->assertEquals( $tracker->getDomainName(), 'foobar' );
     }
 
     public function testClearDomainNameReturnsNull()
     {
-        $tracker = new Tracker(123);
-        $tracker->setDomainName('foobar');
+        $tracker = new Tracker( 123 );
+        $tracker->setDomainName( 'foobar' );
         $tracker->clearDomainName();
-        $this->assertNull($tracker->getDomainName());
+        $this->assertNull( $tracker->getDomainName() );
     }
 
-    public function testAllowLinkerDefaultsToFalse ()
+    public function testAllowLinkerDefaultsToFalse()
     {
-        $tracker = new Tracker(123);
-        $tracker->setAllowLinker(true);
-        $this->assertTrue($tracker->getAllowLinker());
+        $tracker = new Tracker( 123 );
+        $tracker->setAllowLinker( true );
+        $this->assertTrue( $tracker->getAllowLinker() );
     }
 
     public function testAnonymizeIpDefaultsToFalse()
     {
-        $tracker = new Tracker(123);
-        $this->assertFalse($tracker->getAnonymizeIp());
+        $tracker = new Tracker( 123 );
+        $this->assertFalse( $tracker->getAnonymizeIp() );
     }
 
     public function testAnonymizeIp()
     {
-        $tracker = new Tracker(123);
-        $tracker->setAnonymizeIp(true);
-        $this->assertTrue($tracker->getAnonymizeIp());
+        $tracker = new Tracker( 123 );
+        $tracker->setAnonymizeIp( true );
+        $this->assertTrue( $tracker->getAnonymizeIp() );
     }
 }
 
