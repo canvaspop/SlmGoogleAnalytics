@@ -29,8 +29,6 @@ class Collection
      */
     protected $trackers = array();
 
-    function __construct () {}
-
     /**
      * @return bool
      */

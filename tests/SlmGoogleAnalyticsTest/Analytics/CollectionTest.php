@@ -1,7 +1,6 @@
 <?php
 namespace SlmGoogleAnalytics\Analytics;
 
-use \PHPUnit_Framework_TestCase as TestCase;
 use SlmGoogleAnalytics\Analytics\Collection as Collection;
 use SlmGoogleAnalytics\Analytics\Tracker as Tracker;
 
@@ -13,29 +12,46 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Collection
      */
-    protected $object;
+    protected $collection;
+
+    /**
+     * @var Collection > Tracker
+     */
+    protected $child_tracker;
 
     /**
      * @var Tracker
      */
-    protected $child;
+    protected $tracker;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
-        $this->object = new Collection;
-        $this->child = new Tracker('UA-55555-5');
+        $this->collection = new Collection;
+        $this->child_tracker = $this->collection->addTracker('Test', '555');
+
+        $this->tracker = new Tracker('555');
+        $this->tracker->setTitle('Test');
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
     }
+
+    public function testIsEnabledByDefault ()
+    {
+        $this->assertTrue($this->collection->enabled());
+    }
+
+    public function testCollectionContainsTrackerObjects ()
+    {
+        $this->assertContains($this->tracker, $this->collection->getTrackers());
+    }
+
+    public function testAddTrackerReturnsTrackerObject ()
+    {
+        $this->assertEquals($this->tracker, $this->object->addTracker('Test', '555'));
+    }
+
+
 
 }

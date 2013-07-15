@@ -137,8 +137,6 @@ class Tracker
         return $this->domainName;
     }
 
-
-
     public function clearDomainName()
     {
         $this->domainName = null;

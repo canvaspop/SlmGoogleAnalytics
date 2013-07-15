@@ -68,6 +68,13 @@ class TrackerTest extends TestCase
         $this->assertNull($tracker->getDomainName());
     }
 
+    public function testTitle()
+    {
+        $tracker = new Tracker(123);
+        $tracker->setTitle('foobar');
+        $this->assertEquals($tracker->getTitle(), 'foobar');
+    }
+
     public function testDomainName ()
     {
         $tracker = new Tracker(123);
