@@ -58,7 +58,16 @@ If you want to add a another Google Analytics profile (`$tracker` object):
 $tracker = $ga->addTracker( 'Title', 'UA-55555-5' );
 ```
 
-You can modify settings of your newly added GA profile by accessing the methods from your `$tracker` object. For example, If you want to track events and/or ecommerce transactions, but no page tracking, you can turn off the page tracking only too:
+You can modify settings of your newly added GA profile by accessing the methods from your `$tracker` object.
+
+You can also get a Tracker object that is already stored, including default. You can get the object by calling `getTrackerById($id)` or `getTrackerByTitle($title)`. Example:
+
+```php
+$tracker2 = $ga->getTrackerByTitle( 'default' );
+$tracker2->setAnonymizeIp( true );
+```
+
+For example, If you want to track events and/or ecommerce transactions, but no page tracking, you can turn off the page tracking only too:
 
 ```php
 $tracker->setEnablePageTracking(false);

@@ -42,15 +42,16 @@ namespace SlmGoogleAnalytics\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\Helper\HeadScript;
 use SlmGoogleAnalytics\Analytics\Tracker;
+use SlmGoogleAnalytics\Analytics\Collection;
 
 use SlmGoogleAnalytics\Exception\RuntimeException;
 
 class GoogleAnalytics extends AbstractHelper
 {
     /**
-     * @var Tracker
+     * @var Collection
      */
-    protected $trackers;
+    protected $collection;
 
     /**
      * @var string
@@ -64,7 +65,7 @@ class GoogleAnalytics extends AbstractHelper
 
     public function __construct ($collection)
     {
-        $this->trackers = $collection->getTrackers();
+        $this->collection = $collection;
     }
 
     public function getContainer ()
@@ -85,12 +86,10 @@ class GoogleAnalytics extends AbstractHelper
             return;
         }
 
-
-           //  MUST FIX
         // Do not render when tracker is disabled
-        //if ($tracker->enabled()) {
-        //    return;
-        //}
+        if (!$this->collection->enabled()) {
+            return;
+        }
 
         // We need to be sure $container->appendScript() can be called
         $container = $this->view->plugin($this->getContainer());
@@ -101,18 +100,9 @@ class GoogleAnalytics extends AbstractHelper
             ));
         }
 
-        //if(true === $tracker->getEnableMultipleAccounts)
-        //{
-            //$trackers = $tracker->trackers;
-        //}
-        //else
-        //{
-        //    $trackers[] = $tracker;
-        //}
-
         $script  = "var _gaq = _gaq || [];\n";
 
-        foreach ($this->trackers as $tracker) {
+        foreach ($this->collection->getTrackers() as $tracker) {
             $script .= sprintf("_gaq.push(['%s._setAccount', '%s']);\n",
                 $tracker->getTitle(),
                 $tracker->getId());
