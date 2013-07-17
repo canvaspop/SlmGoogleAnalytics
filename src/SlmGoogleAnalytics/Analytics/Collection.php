@@ -4,12 +4,13 @@
  * Collection of all Tracker objects
  *
  * @author Karl Clement <karl.clement@canvaspop.com>
- * User: karlclement
- * Date: 2013-07-12
- * Time: 3:24 PM
+ *         User: karlclement
+ *         Date: 2013-07-12
+ *         Time: 3:24 PM
  */
 
 namespace SlmGoogleAnalytics\Analytics;
+
 
 use SlmGoogleAnalytics\Analytics\Tracker;
 
@@ -32,7 +33,7 @@ class Collection
     /**
      * @return bool
      */
-    public function enabled ()
+    public function enabled()
     {
         return $this->enableTracking;
     }
@@ -40,7 +41,7 @@ class Collection
     /**
      * @param bool $enable_tracking
      */
-    public function setEnableTracking ($enable_tracking = true)
+    public function setEnableTracking( $enable_tracking = true )
     {
         $this->enableTracking = (bool) $enable_tracking;
     }
@@ -48,15 +49,15 @@ class Collection
     /**
      * @param array $trackers
      */
-    public function setTrackers ($tracker)
+    public function setTrackers( $tracker )
     {
-        $this->trackers[] = $tracker;
+        $this->trackers[ ] = $tracker;
     }
 
     /**
      * @return array
      */
-    public function getTrackers ()
+    public function getTrackers()
     {
         return $this->trackers;
     }
@@ -66,13 +67,41 @@ class Collection
      *
      * @param $title
      * @param $id
+     *
      * @return Tracker
      */
-    public function addTracker ($title, $id)
+    public function addTracker( $title, $id )
     {
-        $tracker = new Tracker($id);
-        $tracker->setTitle($title);
-        $this->setTrackers($tracker);
+        $tracker = new Tracker( $id );
+        $tracker->setTitle( $title );
+        $this->setTrackers( $tracker );
+
         return $tracker;
+    }
+
+    public function getTrackerByTitle( $title )
+    {
+        foreach( $this->trackers as $tracker )
+        {
+            if( $title == $tracker->getTitle() )
+            {
+                return $tracker;
+            }
+        }
+
+        return false;
+    }
+
+    public function getTrackerById( $id )
+    {
+        foreach( $this->trackers as $tracker )
+        {
+            if( $id == $tracker->getId() )
+            {
+                return $tracker;
+            }
+        }
+
+        return false;
     }
 }
