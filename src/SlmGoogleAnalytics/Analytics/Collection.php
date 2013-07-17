@@ -13,6 +13,7 @@ namespace SlmGoogleAnalytics\Analytics;
 
 
 use SlmGoogleAnalytics\Analytics\Tracker;
+use SlmGoogleAnalytics\Exception\InvalidArgumentException;
 
 class Collection
 {
@@ -89,7 +90,7 @@ class Collection
             }
         }
 
-        return false;
+        throw new InvalidArgumentException('Title provided does not exist.');
     }
 
     public function getTrackerById( $id )
@@ -102,6 +103,6 @@ class Collection
             }
         }
 
-        return false;
+        throw new InvalidArgumentException('ID provided does not exist.');
     }
 }
