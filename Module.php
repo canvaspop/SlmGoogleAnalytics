@@ -110,7 +110,7 @@ class Module implements
                     }
 
                     if (false === $config['enable']) {
-                        $tracker->setEnableTracking(false);
+                        $trackers->setEnableTracking(false);
                     }
 
                     return $trackers;
