@@ -98,7 +98,8 @@ class Module implements
                     $config = $sm->get('config');
                     $config = $config['google_analytics'];
 
-                    $tracker = new Analytics\Tracker($config['id']);
+                    $trackers = new \SlmGoogleAnalytics\Analytics\Collection;
+                    $tracker = $trackers->addTracker($config['title'], $config['id']);
 
                     if (isset($config['domain_name'])) {
                         $tracker->setDomainName($config['domain_name']);
@@ -109,10 +110,10 @@ class Module implements
                     }
 
                     if (false === $config['enable']) {
-                        $tracker->setEnableTracking(false);
+                        $trackers->setEnableTracking(false);
                     }
 
-                    return $tracker;
+                    return $trackers;
                 },
             ),
         );

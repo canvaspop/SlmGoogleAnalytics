@@ -42,26 +42,41 @@ the `Zend\View\Helper\InlineScript` is used, but this can be modified into
 
 The `SlmGoogleAnalytics\Analytics\Tracker` is aliased to `google-analytics` in
 the Service Manager configuration. This object is used to configure the Google
-Analytics tracking. You can access this object inside a controller using the locator:
+Analytics tracking. You can access this object inside a controller using the locator. This is the `$ga` object. If you want to add a another Google Analytics profile:
 
 ```php
 public function fooAction ()
 {
     $ga = $this->getServiceLocator()->get('google-analytics');
+    $tracker = $ga->addTracker( 'Title', 'UA-55555-5' );
 }
 ```
 
-You can disable the tracking completely. This will result in no javascript code rendered at all:
+If you want to add a another Google Analytics profile (`$tracker` object):
+
+```php
+$tracker = $ga->addTracker( 'Title', 'UA-55555-5' );
+```
+
+You can modify settings of your newly added GA profile by accessing the methods from your `$tracker` object.
+
+You can also get a Tracker object that is already stored, including default. You can get the object by calling `getTrackerById($id)` or `getTrackerByTitle($title)`. Example:
+
+```php
+$tracker2 = $ga->getTrackerByTitle( 'default' );
+$tracker2->setAnonymizeIp( true );
+```
+
+For example, If you want to track events and/or ecommerce transactions, but no page tracking, you can turn off the page tracking only too:
+
+```php
+$tracker->setEnablePageTracking(false);
+```
+
+You can disable the tracking completely (globally). This will result in no javascript code rendered at all:
 
 ```php
 $ga->setEnableTracking(false);
-```
-
-If you want to track events and/or ecommerce transactions, but no page tracking,
-you can turn off the page tracking only too:
-
-```php
-$ga->setEnablePageTracking(false);
 ```
 
 ### Events
@@ -69,13 +84,15 @@ To track an event, you must instantiate a `SlmGoogleAnalytics\Analytics\Event`
 and add it to the tracker:
 
 ```php
-$event = new SlmGoogleAnalytics\Analytics\Event;
-$event->setCategory('Videos');
-$event->setAction('Play');
+$event = new SlmGoogleAnalytics\Analytics\Event( 'CategoryName', 'ActionName' );
 $event->setLabel('Gone With the Wind');  // optionally
 $event->setValue(5);                     // optionally
+```
 
-$ga->addEvent($event);
+Once your `$event` object contains all the settings, add the event to your `$tracker` object:
+
+```php
+$tracker->addEvent($event);
 ```
 
 ### Transactions
@@ -93,8 +110,12 @@ $item->setPrice('11.99');         // unit price
 $item->setQuantity('2');          // quantity
 
 $transaction->addItem($item);
+```
 
-$ga->addTransaction($transaction);
+Once your `$transaction` object contains all the settings, add the transaction to your `$tracker` object:
+
+```php
+$tracker->addTransaction($transaction);
 ```
 
 The `Transaction` and `Item` have accessors and mutators for every property
@@ -110,7 +131,7 @@ consequences of this feature.
 To collect data anonymously, set the flag in the tracker:
 
 ```php
-$ga->setAnonymizeIp(true);
+$tracker->setAnonymizeIp(true);
 ```
 
 ### Tracking multiple domains
@@ -119,8 +140,8 @@ order to do so, you can set the canonical domain name and optionally allow
 links between the different domains:
 
 ```php
-$ga->setDomainName('example.com');
-$ga->setAllowLinker(true);
+$tracker->setDomainName('example.com');
+$tracker->setAllowLinker(true);
 ```
 
 Or, alternatively, you can set these variables inside the configuration:
@@ -149,7 +170,7 @@ $name  = 'Section';
 $value = 'Life & Style';
 $var   = new SlmGoogleAnalytics\Analytics\CustomVariable($index, $name, $value);
 
-$ga->addCustomVariable($var);
+$tracker->addCustomVariable($var);
 ```
 
 You can, if required, set the scope of the variable:

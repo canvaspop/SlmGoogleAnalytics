@@ -45,11 +45,13 @@ use SlmGoogleAnalytics\Exception\InvalidArgumentException;
 class Tracker
 {
     /**
-     * Web property ID for Google Analytics
+     * Web property IDs for Google Analytics
      *
      * @var string
      */
     protected $id;
+
+    protected $title;
 
     /**
      * Flag if tracking is enabled or not
@@ -86,14 +88,20 @@ class Tracker
         $this->id = $id;
     }
 
-    public function enabled ()
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
     {
-        return $this->enableTracking;
+        $this->title = $title;
     }
 
-    public function setEnableTracking ($enable_tracking = true)
+    /**
+     * @return string
+     */
+    public function getTitle()
     {
-        $this->enableTracking = (bool) $enable_tracking;
+        return $this->title;
     }
 
     public function enabledPageTracking ()
