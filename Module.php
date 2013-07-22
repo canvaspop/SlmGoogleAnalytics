@@ -46,6 +46,7 @@ use Zend\Mvc\MvcEvent;
 
 use SlmGoogleAnalytics\Analytics;
 use SlmGoogleAnalytics\View\Helper;
+use SlmGoogleAnalytics\Analytics\Collection;
 
 class Module implements
     Feature\AutoloaderProviderInterface,
@@ -98,8 +99,17 @@ class Module implements
                     $config = $sm->get('config');
                     $config = $config['google_analytics'];
 
-                    $trackers = new \SlmGoogleAnalytics\Analytics\Collection;
-                    $tracker = $trackers->addTracker($config['title'], $config['id']);
+                    $trackers = new Collection;
+
+                    if(isset($config['title']) && isset($config['id']))
+                    {
+                        $tracker = $trackers->addTracker($config['title'], $config['id']);
+                    }
+                    else
+                    {
+                        $trackers->setEnableTracking(false);
+                        return $trackers;
+                    }
 
                     if (isset($config['domain_name'])) {
                         $tracker->setDomainName($config['domain_name']);
