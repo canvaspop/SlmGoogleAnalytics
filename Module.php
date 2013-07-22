@@ -79,8 +79,8 @@ class Module implements
         return array(
             'factories' => array(
                 'googleAnalytics' => function($sm) {
-                    $tracker = $sm->getServiceLocator()->get('google-analytics');
-                    $helper  = new Helper\GoogleAnalytics($tracker);
+                    $trackers = $sm->getServiceLocator()->get('google-analytics');
+                    $helper  = new Helper\GoogleAnalytics($trackers);
 
                     return $helper;
                 },
@@ -97,7 +97,14 @@ class Module implements
             'factories' => array(
                 'SlmGoogleAnalytics\Analytics\Tracker' => function($sm) {
                     $config = $sm->get('config');
-                    $config = $config['google_analytics'];
+                    if (isset($config[ 'mothership' ][ 'settings' ]['google_analytics']))
+                    {
+                        $config = $config[ 'mothership' ][ 'settings' ]['google_analytics'];
+                    }
+                    else
+                    {
+                        $config = $config['google_analytics'];
+                    }
 
                     $trackers = new Collection;
 
