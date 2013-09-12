@@ -104,7 +104,7 @@ class Tracker
         return $this->title;
     }
 
-    public function enabledPageTracking ()
+    public function getEnablePageTracking()
     {
         return $this->enablePageTracking;
     }

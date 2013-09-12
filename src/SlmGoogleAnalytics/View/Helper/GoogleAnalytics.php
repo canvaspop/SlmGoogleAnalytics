@@ -134,7 +134,7 @@ class GoogleAnalytics extends AbstractHelper
                 }
             }
 
-            if ($tracker->enabledPageTracking()) {
+            if ($tracker->getEnablePageTracking()) {
                 $script .= sprintf("_gaq.push(['%s._trackPageview']);\n",
                     $tracker->getTitle());
             }

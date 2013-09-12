@@ -126,7 +126,7 @@ class Module implements
                         $tracker->setAllowLinker($config['allow_linker']);
                     }
 
-                    if (false === $config['enable']) {
+                    if (false == $config['enable'] || 'false' == $config['enable']) {
                         $trackers->setEnableTracking(false);
                     }
 

@@ -40,11 +40,19 @@ class Collection
     }
 
     /**
+     * @return boolean
+     */
+    public function getEnableTracking()
+    {
+        return (bool) $this->enableTracking;
+    }
+
+    /**
      * @param bool $enable_tracking
      */
-    public function setEnableTracking( $enable_tracking = true )
+    public function setEnableTracking( $enableTracking )
     {
-        $this->enableTracking = (bool) $enable_tracking;
+        $this->enableTracking = (bool) $enableTracking;
     }
 
     /**
@@ -90,7 +98,7 @@ class Collection
             }
         }
 
-        throw new InvalidArgumentException('Title provided does not exist.');
+        throw new InvalidArgumentException( 'Title provided does not exist.' );
     }
 
     public function getTrackerById( $id )
@@ -103,6 +111,6 @@ class Collection
             }
         }
 
-        throw new InvalidArgumentException('ID provided does not exist.');
+        throw new InvalidArgumentException( 'ID provided does not exist.' );
     }
 }
