@@ -1,13 +1,4 @@
 <?php
-/**
- * Collection class
- * Collection of all Tracker objects
- *
- * @author Karl Clement <karl.clement@canvaspop.com>
- *         User: karlclement
- *         Date: 2013-07-12
- *         Time: 3:24 PM
- */
 
 namespace SlmGoogleAnalytics\Analytics;
 
