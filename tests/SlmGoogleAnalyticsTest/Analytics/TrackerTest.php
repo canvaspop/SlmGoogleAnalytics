@@ -53,7 +53,7 @@ class TrackerTest extends TestCase
     public function testHasPageTrackingEnabledByDefault()
     {
         $tracker = new Tracker( 123 );
-        $this->assertTrue( $tracker->enabledPageTracking() );
+        $this->assertTrue( $tracker->getEnablePageTracking() );
     }
 
     public function testDomainNameDefaultsToFalse()
